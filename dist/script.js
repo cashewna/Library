@@ -79,11 +79,27 @@ class LibraryUI {
         const authorCell = row?.insertCell(2);
         const pagesCell = row?.insertCell(3);
         const readCell = row?.insertCell(4);
+        const deleteCell = row?.insertCell(5);
+        row.setAttribute('id', `${book.getId()}`);
         idCell.textContent = `${book.getId()}`;
         titleCell.textContent = book.getTitle();
         authorCell.textContent = book.getAuthor();
         pagesCell.textContent = book.getNumberOfPages().toString();
         readCell.textContent = book.getHasBeenRead() ? "Yes" : "No";
+        deleteCell.appendChild(this.createDeleteButton(book.getId()));
+    }
+    createDeleteButton(id) {
+        const button = document.createElement('button');
+        button.textContent = 'Delete';
+        button.addEventListener('click', () => {
+            const row = document.getElementById(`${id}`);
+            if (!row) {
+                return;
+            }
+            row.remove();
+            myLibrary.splice(id, 1);
+        });
+        return button;
     }
 }
 const book1 = new Book("James Clear", "Atomic Habits", 300, false);
