@@ -88,6 +88,7 @@ class LibraryUI {
             const read = document.getElementById('read') as HTMLInputElement;
             const newBook = new Book(author.value, title.value, parseInt(pages.value), read.checked);
             Book.addToLibrary(newBook, myLibrary);
+            form.reset();
             this.newBookDialog?.close();
             this.displayLibrary(newBook);
         });

@@ -64,6 +64,7 @@ class LibraryUI {
             const read = document.getElementById('read');
             const newBook = new Book(author.value, title.value, parseInt(pages.value), read.checked);
             Book.addToLibrary(newBook, myLibrary);
+            form.reset();
             this.newBookDialog?.close();
             this.displayLibrary(newBook);
         });
@@ -83,8 +84,6 @@ class LibraryUI {
         authorCell.textContent = book.getAuthor();
         pagesCell.textContent = book.getNumberOfPages().toString();
         readCell.textContent = book.getHasBeenRead() ? "Yes" : "No";
-    }
-    addBookToLibrary(book) {
     }
 }
 const book1 = new Book("James Clear", "Atomic Habits", 300, false);
