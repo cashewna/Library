@@ -52,6 +52,8 @@ class LibraryUI {
 }
 const myLibrary = [];
 const book1 = new Book("James Clear", "Atomic Habits", 300, false);
+const book2 = new Book("J.K. Rowling", "Harry Potter", 500, true);
 Book.addToLibrary(book1, myLibrary);
+Book.addToLibrary(book2, myLibrary);
 const myLibraryUI = new LibraryUI('library-body');
 myLibraryUI.displayLibrary(myLibrary);
