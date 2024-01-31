@@ -1,14 +1,21 @@
 "use strict";
+const myLibrary = [];
 class Book {
+    static id = 0;
+    id;
     author;
     title;
     numberOfPages;
     hasBeenRead;
     constructor(author, title, numberOfPages, hasBeenRead) {
+        this.id = ++Book.id;
         this.author = author;
         this.title = title;
         this.numberOfPages = numberOfPages;
         this.hasBeenRead = hasBeenRead;
+    }
+    getId() {
+        return this.id;
     }
     getTitle() {
         return this.title;
@@ -28,32 +35,58 @@ class Book {
 }
 class LibraryUI {
     tableBody;
-    constructor(containerId) {
+    newBookBtn;
+    newBookDialog;
+    newBookDialogClose;
+    newBookDialogSubmit;
+    constructor(containerId, newBookBtn, newBookDialog, newBookDialogClose, newBookDialogSubmit) {
         this.tableBody = document.getElementById(containerId);
-    }
-    displayLibrary(library) {
-        for (let i = 0; i < library.length; i++) {
-            const row = this.tableBody?.insertRow(-1);
-            if (!row) {
+        this.newBookBtn = document.getElementById(newBookBtn);
+        this.newBookDialog = document.getElementById(newBookDialog);
+        this.newBookDialogClose = document.getElementById(newBookDialogClose);
+        this.newBookDialogSubmit = document.getElementById(newBookDialogSubmit);
+        this.newBookBtn?.addEventListener('click', () => {
+            this.newBookDialog?.showModal();
+        });
+        this.newBookDialogClose?.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.newBookDialog?.close();
+        });
+        this.newBookDialogSubmit?.addEventListener('click', (e) => {
+            const form = document.getElementById('new-book-form');
+            if (!form.checkValidity()) {
                 return;
             }
-            const idCell = row?.insertCell(0);
-            const titleCell = row?.insertCell(1);
-            const authorCell = row?.insertCell(2);
-            const pagesCell = row?.insertCell(3);
-            const readCell = row?.insertCell(4);
-            idCell.textContent = `${i + 1}`;
-            titleCell.textContent = library[i].getTitle();
-            authorCell.textContent = library[i].getAuthor();
-            pagesCell.textContent = library[i].getNumberOfPages().toString();
-            readCell.textContent = library[i].getHasBeenRead() ? "Yes" : "No";
+            e.preventDefault();
+            const author = document.getElementById('author');
+            const title = document.getElementById('title');
+            const pages = document.getElementById('pages');
+            const read = document.getElementById('read');
+            const newBook = new Book(author.value, title.value, parseInt(pages.value), read.checked);
+            Book.addToLibrary(newBook, myLibrary);
+            form.reset();
+            this.newBookDialog?.close();
+            this.displayLibrary(newBook);
+        });
+    }
+    displayLibrary(book) {
+        const row = this.tableBody?.insertRow();
+        if (!row) {
+            return;
         }
+        const idCell = row?.insertCell(0);
+        const titleCell = row?.insertCell(1);
+        const authorCell = row?.insertCell(2);
+        const pagesCell = row?.insertCell(3);
+        const readCell = row?.insertCell(4);
+        idCell.textContent = `${book.getId()}`;
+        titleCell.textContent = book.getTitle();
+        authorCell.textContent = book.getAuthor();
+        pagesCell.textContent = book.getNumberOfPages().toString();
+        readCell.textContent = book.getHasBeenRead() ? "Yes" : "No";
     }
 }
-const myLibrary = [];
 const book1 = new Book("James Clear", "Atomic Habits", 300, false);
-const book2 = new Book("J.K. Rowling", "Harry Potter", 500, true);
 Book.addToLibrary(book1, myLibrary);
-Book.addToLibrary(book2, myLibrary);
-const myLibraryUI = new LibraryUI('library-body');
-myLibraryUI.displayLibrary(myLibrary);
+const myLibraryUI = new LibraryUI('library-body', 'new-book-btn', 'new-book-dialog', 'new-book-dialog-close', 'new-book-submit');
+myLibraryUI.displayLibrary(book1);
