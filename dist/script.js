@@ -28,8 +28,21 @@ class Book {
 }
 class LibraryUI {
     tableBody;
-    constructor(containerId) {
+    newBookBtn;
+    newBookDialog;
+    newBookDialogClose;
+    constructor(containerId, newBookBtn, newBookDialog, newBookDialogClose) {
         this.tableBody = document.getElementById(containerId);
+        this.newBookBtn = document.getElementById(newBookBtn);
+        this.newBookDialog = document.getElementById(newBookDialog);
+        this.newBookDialogClose = document.getElementById(newBookDialogClose);
+        this.newBookBtn?.addEventListener('click', () => {
+            this.newBookDialog?.showModal();
+        });
+        this.newBookDialogClose?.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.newBookDialog?.close();
+        });
     }
     displayLibrary(library) {
         for (let i = 0; i < library.length; i++) {
@@ -49,11 +62,13 @@ class LibraryUI {
             readCell.textContent = library[i].getHasBeenRead() ? "Yes" : "No";
         }
     }
+    addBookToLibrary(book) {
+    }
 }
 const myLibrary = [];
 const book1 = new Book("James Clear", "Atomic Habits", 300, false);
 const book2 = new Book("J.K. Rowling", "Harry Potter", 500, true);
 Book.addToLibrary(book1, myLibrary);
 Book.addToLibrary(book2, myLibrary);
-const myLibraryUI = new LibraryUI('library-body');
+const myLibraryUI = new LibraryUI('library-body', 'new-book-btn', 'new-book-dialog', 'new-book-dialog-close');
 myLibraryUI.displayLibrary(myLibrary);

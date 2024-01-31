@@ -39,12 +39,27 @@ class Book {
 
 class LibraryUI {
     private tableBody: HTMLTableElement | null;
+    private newBookBtn: HTMLButtonElement | null;
+    private newBookDialog: HTMLDialogElement | null;
+    private newBookDialogClose: HTMLButtonElement | null;
 
-    constructor(containerId: string) {
+    constructor(containerId: string, newBookBtn: string, newBookDialog: string, newBookDialogClose: string) {
         this.tableBody = document.getElementById(containerId) as HTMLTableElement;
+        this.newBookBtn = document.getElementById(newBookBtn) as HTMLButtonElement;
+        this.newBookDialog = document.getElementById(newBookDialog) as HTMLDialogElement;
+        this.newBookDialogClose = document.getElementById(newBookDialogClose) as HTMLButtonElement;
+        
+        this.newBookBtn?.addEventListener('click', () => {
+            this.newBookDialog?.showModal();
+        });
+        
+        this.newBookDialogClose?.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.newBookDialog?.close();
+        });
     }
 
-    displayLibrary(library: Book[]) {
+    public displayLibrary(library: Book[]) {
         for (let i = 0; i < library.length; i++) {
             const row = this.tableBody?.insertRow(-1);
             
@@ -65,6 +80,10 @@ class LibraryUI {
             readCell.textContent = library[i].getHasBeenRead() ? "Yes" : "No";
         }
     }
+    
+    public addBookToLibrary(book: Book) {
+        
+    }
 }
 
 const myLibrary: Book[] = [];
@@ -73,5 +92,6 @@ const book2 = new Book("J.K. Rowling", "Harry Potter", 500, true);
 Book.addToLibrary(book1, myLibrary);
 Book.addToLibrary(book2, myLibrary);
 
-const myLibraryUI = new LibraryUI('library-body');
+const myLibraryUI = new LibraryUI('library-body', 'new-book-btn', 'new-book-dialog', 'new-book-dialog-close');
 myLibraryUI.displayLibrary(myLibrary);
+
