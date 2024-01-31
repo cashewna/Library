@@ -15,47 +15,55 @@ class Book {
         this.numberOfPages = numberOfPages;
         this.hasBeenRead = hasBeenRead;
     }
+    
+    public getTitle() {
+        return this.title;
+    }
+    
+    public getAuthor() {
+        return this.author;
+    }
+
+    public getNumberOfPages() {
+        return this.numberOfPages;
+    }
+
+    public getHasBeenRead() {
+        return this.hasBeenRead;
+    }
 
     public static addToLibrary(book: Book, library: Book[]) {
         library.push(book);
     }
-
-    public toString(): string {
-        return `
-            Title: ${this.title} <br>
-            Author: ${this.author} <br>
-            Pages: ${this.numberOfPages} <br>
-            Read: ${this.hasBeenRead ? "Yes" : "No"}
-        `;
-    }
 }
 
 class LibraryUI {
-    private libraryContainer: HTMLElement | null;
+    private tableBody: HTMLTableElement | null;
 
     constructor(containerId: string) {
-        this.libraryContainer = document.getElementById(containerId);
+        this.tableBody = document.getElementById(containerId) as HTMLTableElement;
     }
 
     displayLibrary(library: Book[]) {
-        const table = document.createElement('table');
-        const headerRow = table.createTHead().insertRow(0);
-        const headerCell1 = headerRow.insertCell(0);
-        const headerCell2 = headerRow.insertCell(1);
+        for (let i = 0; i < library.length; i++) {
+            const row = this.tableBody?.insertRow(-1);
+            
+            if (!row) {
+                return;
+            }
 
-        headerCell1.textContent = "Book #";
-        headerCell2.textContent = "Details";
+            const idCell = row?.insertCell(0);
+            const titleCell = row?.insertCell(1);
+            const authorCell = row?.insertCell(2);
+            const pagesCell = row?.insertCell(3);
+            const readCell = row?.insertCell(4);
 
-        for (let i = 1; i <= library.length; i++) {
-            const row = table.insertRow(i);
-            const cell1 = row.insertCell(0);
-            const cell2 = row.insertCell(1);
-
-            cell1.textContent = `${i}`;
-            cell2.innerHTML = library[i - 1].toString();
+            idCell.textContent = `${i + 1}`;
+            titleCell.textContent = library[i].getTitle();
+            authorCell.textContent = library[i].getAuthor();
+            pagesCell.textContent = library[i].getNumberOfPages().toString();
+            readCell.textContent = library[i].getHasBeenRead() ? "Yes" : "No";
         }
-        
-        this.libraryContainer?.appendChild(table);
     }
 }
 
@@ -63,5 +71,5 @@ const myLibrary: Book[] = [];
 const book1 = new Book("James Clear", "Atomic Habits", 300, false);
 Book.addToLibrary(book1, myLibrary);
 
-const myLibraryUI = new LibraryUI('library-container');
+const myLibraryUI = new LibraryUI('library-body');
 myLibraryUI.displayLibrary(myLibrary);

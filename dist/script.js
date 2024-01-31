@@ -10,42 +10,48 @@ class Book {
         this.numberOfPages = numberOfPages;
         this.hasBeenRead = hasBeenRead;
     }
+    getTitle() {
+        return this.title;
+    }
+    getAuthor() {
+        return this.author;
+    }
+    getNumberOfPages() {
+        return this.numberOfPages;
+    }
+    getHasBeenRead() {
+        return this.hasBeenRead;
+    }
     static addToLibrary(book, library) {
         library.push(book);
     }
-    toString() {
-        return `
-            Title: ${this.title} <br>
-            Author: ${this.author} <br>
-            Pages: ${this.numberOfPages} <br>
-            Read: ${this.hasBeenRead ? "Yes" : "No"}
-        `;
-    }
 }
 class LibraryUI {
-    libraryContainer;
+    tableBody;
     constructor(containerId) {
-        this.libraryContainer = document.getElementById(containerId);
+        this.tableBody = document.getElementById(containerId);
     }
     displayLibrary(library) {
-        const table = document.createElement('table');
-        const headerRow = table.createTHead().insertRow(0);
-        const headerCell1 = headerRow.insertCell(0);
-        const headerCell2 = headerRow.insertCell(1);
-        headerCell1.textContent = "Book #";
-        headerCell2.textContent = "Details";
-        for (let i = 1; i <= library.length; i++) {
-            const row = table.insertRow(i);
-            const cell1 = row.insertCell(0);
-            const cell2 = row.insertCell(1);
-            cell1.textContent = `${i}`;
-            cell2.innerHTML = library[i - 1].toString();
+        for (let i = 0; i < library.length; i++) {
+            const row = this.tableBody?.insertRow(-1);
+            if (!row) {
+                return;
+            }
+            const idCell = row?.insertCell(0);
+            const titleCell = row?.insertCell(1);
+            const authorCell = row?.insertCell(2);
+            const pagesCell = row?.insertCell(3);
+            const readCell = row?.insertCell(4);
+            idCell.textContent = `${i + 1}`;
+            titleCell.textContent = library[i].getTitle();
+            authorCell.textContent = library[i].getAuthor();
+            pagesCell.textContent = library[i].getNumberOfPages().toString();
+            readCell.textContent = library[i].getHasBeenRead() ? "Yes" : "No";
         }
-        this.libraryContainer?.appendChild(table);
     }
 }
 const myLibrary = [];
 const book1 = new Book("James Clear", "Atomic Habits", 300, false);
 Book.addToLibrary(book1, myLibrary);
-const myLibraryUI = new LibraryUI('library-container');
+const myLibraryUI = new LibraryUI('library-body');
 myLibraryUI.displayLibrary(myLibrary);
