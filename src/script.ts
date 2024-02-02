@@ -41,6 +41,10 @@ class Book {
         return this.hasBeenRead;
     }
 
+    public setHasBeenRead(hasBeenRead: boolean) {
+        this.hasBeenRead = hasBeenRead;
+    }
+
     public static addToLibrary(book: Book, library: Book[]) {
         library.push(book);
     }
@@ -113,8 +117,29 @@ class LibraryUI {
         titleCell.textContent = book.getTitle();
         authorCell.textContent = book.getAuthor();
         pagesCell.textContent = book.getNumberOfPages().toString();
-        readCell.textContent = book.getHasBeenRead() ? "Yes" : "No";
+        readCell.appendChild(this.createReadButton(book.getId(), book.getHasBeenRead()));
         deleteCell.appendChild(this.createDeleteButton(book.getId()));
+    }
+    
+    private createReadButton(id: number, hasBeenRead: boolean): HTMLButtonElement {
+        const button = document.createElement('button');
+        button.textContent = hasBeenRead ? 'Read' : 'Unread';
+        button.addEventListener('click', () => {
+            const row = document.getElementById(`${id}`);
+            if (!row) {
+                return;
+            }
+            
+            const book = myLibrary.find(book => book.getId() === id);
+            if (!book) {
+                return;
+            }
+
+            book.setHasBeenRead(!book.getHasBeenRead());
+            
+            button.textContent = book.getHasBeenRead() ? 'Read' : 'Unread';
+        });
+        return button;
     }
 
     private createDeleteButton(id: number): HTMLButtonElement {
@@ -133,8 +158,5 @@ class LibraryUI {
     }
 }
 
-const book1 = new Book("James Clear", "Atomic Habits", 300, false);
-Book.addToLibrary(book1, myLibrary);
-
 const myLibraryUI = new LibraryUI('library-body', 'new-book-btn', 'new-book-dialog', 'new-book-dialog-close', 'new-book-submit');
-myLibraryUI.displayLibrary(book1);
+// myLibraryUI.displayLibrary(book1);
