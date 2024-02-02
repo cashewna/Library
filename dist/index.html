@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Library</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="style.css" rel="stylesheet">
+        <script src="script.js" defer></script>
+    </head>
+    <body>
+        <div class="header">
+            <span>Library</span>
+        </div>
+
+        <div id="library-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Pages</th>
+                        <th>Read Status</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody id="library-body">
+                </tbody>
+            </table>
+            <dialog id="new-book-dialog">
+                <form id="new-book-form" method="dialog">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" required>
+                    <label for="author">Author</label>
+                    <input type="text" id="author" name="author" required>
+                    <label for="pages">Pages</label>
+                    <input type="number" id="pages" name="pages" required>
+                    <label for="read">Read?</label>
+                    <input type="checkbox" id="read" name="read">
+                    
+                    <button id="new-book-dialog-close">Cancel</button>
+                    <input id="new-book-submit" type="submit" value="Submit">
+                </form>
+            </dialog>
+            
+            <p>
+                <button id="new-book-btn">
+                    New Book
+                </button>
+            </p>
+        </div>
+        <div class="footer">
+            <span>&copy Krishna R. Khong 2024</span>
+            <a href="https://github.com/cashewna/Library">Source Code</a>
+        </div>
+    </body>
+</html>
